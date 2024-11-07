@@ -1,14 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import productsData from "../data/products.json"; // Asegúrate de importar correctamente los datos
-import { addPurchase } from "../firebase/purchaseService";
 import { toast } from "sonner";
+
+const API_URL = import.meta.env.VITE_APP_FIREBASE_API_URL;
 
 function Item() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = productsData.products.find((p) => p.id === parseInt(id));
+  const [product, setProduct] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(`${API_URL}/items/${id}`);
+
+        if (!response.ok) {
+          throw new Error("Producto no encontrado");
+        }
+
+        const data = await response.json();
+        setProduct(data);
+      } catch (error) {
+        console.error("Error al obtener el producto:", error);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
 
   if (!product) {
     return <p>Producto no encontrado.</p>;
@@ -38,13 +57,25 @@ function Item() {
       title: product.title,
       price: product.price,
       quantity: 1,
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
     };
 
     try {
-      await addPurchase(purchaseData);
+      const response = await fetch(`${API_URL}/addSale`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(purchaseData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+
       toast.success("Compra registrada con éxito.");
-    } catch {
+    } catch (error) {
+      console.error("Error al registrar la compra:", error);
       toast.error("Error al registrar la compra.");
     }
   };

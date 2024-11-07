@@ -1,19 +1,27 @@
 import { useEffect, useState } from "react";
-import { getAllPurchases } from "../firebase/purchaseService";
 
 const Sales = () => {
   const [sales, setSales] = useState([]);
 
   // Obtener todas las ventas al montar el componente
+
+  const API_URL = import.meta.env.VITE_APP_FIREBASE_API_URL;
   useEffect(() => {
     const fetchSales = async () => {
       try {
-        const salesData = await getAllPurchases();
+        const response = await fetch(`${API_URL}/sales`);
+
+        if (!response.ok) {
+          throw new Error("Error al obtener ventas");
+        }
+
+        const salesData = await response.json();
         setSales(salesData);
       } catch (error) {
-        console.error("Error al obtener ventas: ", error);
+        console.error("Error al obtener ventas:", error);
       }
     };
+
     fetchSales();
   }, []);
 
