@@ -8,7 +8,6 @@ function Item() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [loading, setLoading] = useState(true); // Estado de carga
   const [error, setError] = useState(null); // Estado de error
 
@@ -41,23 +40,8 @@ function Item() {
   // Mostrar un mensaje de error si no se encuentra el producto
   if (error) return <p>{error}</p>;
 
-  // Verificación adicional de `product` y `product.images`
-  if (!product || !product.images || product.images.length === 0) {
-    return <p>Producto no encontrado o sin imágenes.</p>;
-  }
-
-  const handleNextImage = () => {
-    setCurrentImageIndex(
-      (prevIndex) => (prevIndex + 1) % product.images.length
-    );
-  };
-
-  const handlePreviousImage = () => {
-    setCurrentImageIndex(
-      (prevIndex) =>
-        (prevIndex - 1 + product.images.length) % product.images.length
-    );
-  };
+  // Verificación adicional de `product`
+  if (!product) return <p>Producto no encontrado.</p>;
 
   const renderStars = (rating) => {
     const roundedRating = Math.round(rating);
@@ -112,23 +96,8 @@ function Item() {
         />
       </nav>
 
-      {/* Imagen del producto con navegación */}
+      {/* Detalle del producto */}
       <div className="p-4 flex flex-col items-center">
-        <div className="flex items-center">
-          <button onClick={handlePreviousImage} className="text-2xl px-2">
-            ⬅️
-          </button>
-          <img
-            src={product.images[currentImageIndex]}
-            alt={product.title}
-            className="w-64 h-64 mx-4"
-          />
-          <button onClick={handleNextImage} className="text-2xl px-2">
-            ➡️
-          </button>
-        </div>
-
-        {/* Detalle del producto */}
         <div className="text-center mt-4">
           <h2 className="text-2xl font-bold">{product.title}</h2>
           <p className="text-gray-700 mt-2">{product.description}</p>
