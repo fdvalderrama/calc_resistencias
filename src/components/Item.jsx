@@ -9,6 +9,8 @@ function Item() {
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [loading, setLoading] = useState(true); // Estado de carga
+  const [error, setError] = useState(null); // Estado de error
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -21,16 +23,27 @@ function Item() {
 
         const data = await response.json();
         setProduct(data);
+        setError(null); // Reinicia el error si se obtiene el producto
       } catch (error) {
         console.error("Error al obtener el producto:", error);
+        setError("Producto no encontrado");
+      } finally {
+        setLoading(false); // Detiene la carga al finalizar la petición
       }
     };
 
     fetchProduct();
   }, [id]);
 
-  if (!product) {
-    return <p>Producto no encontrado.</p>;
+  // Mostrar un mensaje de carga mientras se obtiene el producto
+  if (loading) return <p>Cargando...</p>;
+
+  // Mostrar un mensaje de error si no se encuentra el producto
+  if (error) return <p>{error}</p>;
+
+  // Verificación adicional de `product` y `product.images`
+  if (!product || !product.images || product.images.length === 0) {
+    return <p>Producto no encontrado o sin imágenes.</p>;
   }
 
   const handleNextImage = () => {
