@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const API_URL = import.meta.env.VITE_APP_FIREBASE_API_URL;
+const API_URL = "https://backend-repository-chi.vercel.app/api";
 
 function Items() {
   const location = useLocation();

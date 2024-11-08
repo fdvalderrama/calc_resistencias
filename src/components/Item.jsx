@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-const API_URL = import.meta.env.VITE_APP_FIREBASE_API_URL;
+const API_URL = "https://backend-repository-chi.vercel.app/api";
 
 function Item() {
   const { id } = useParams();
