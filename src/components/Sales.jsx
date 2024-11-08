@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 const Sales = () => {
   const [sales, setSales] = useState([]);
 
-  // Obtener todas las ventas al montar el componente
+  // URL de la API
+  const API_URL = "https://backend-repository-chi.vercel.app/api";
 
-  const API_URL = import.meta.env.VITE_APP_FIREBASE_API_URL;
   useEffect(() => {
     const fetchSales = async () => {
       try {
@@ -29,10 +29,11 @@ const Sales = () => {
     <div>
       <h2>Ventas</h2>
       <ul>
-        {sales.map((sale) => (
-          <li key={sale.id}>
-            Producto: {sale.title}, Cantidad: {sale.quantity}, Precio: $
-            {sale.price}
+        {sales.map((sale, index) => (
+          <li key={sale.productId || index}>
+            Producto: {sale.product?.title || "Sin título"}, Cantidad:{" "}
+            {sale.quantity || 1}, Precio: $
+            {sale.product?.price || "No disponible"}
           </li>
         ))}
       </ul>
