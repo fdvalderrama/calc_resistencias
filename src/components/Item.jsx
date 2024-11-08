@@ -47,6 +47,8 @@ function Item() {
     const roundedRating = Math.round(rating);
     return "⭐️".repeat(roundedRating);
   };
+  const params = new URLSearchParams(location.search);
+  const searchParam = params.get("search") || "";
 
   const handlePurchase = async () => {
     const purchaseData = {
@@ -79,25 +81,37 @@ function Item() {
 
   return (
     <div>
-      <nav className="flex items-center p-4 bg-gray-200">
+      <nav className="flex items-center p-4">
         <span
           role="img"
           aria-label="sales-icon"
-          className="text-2xl cursor-pointer"
+          className="text-6xl cursor-pointer mr-4" // Aumenta el tamaño del ícono y ajusta el margen derecho
           onClick={() => navigate("/sales")}
         >
-          💸
+          🛍️
         </span>
         <input
           type="text"
           placeholder="Buscar..."
-          className="ml-4 flex-1 p-2 border border-gray-300 rounded"
-          defaultValue=""
+          className="flex-1 p-2 border border-black rounded-lg" // Contorno negro y bordes redondeados
+          defaultValue={searchParam}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              navigate(`/items?search=${e.target.value}`);
+            }
+          }}
         />
       </nav>
 
       {/* Detalle del producto */}
       <div className="p-4 flex flex-col items-center">
+        {product.thumbnail && (
+          <img
+            src={product.thumbnail}
+            alt={`${product.title} thumbnail`}
+            className="w-40 h-40 object-contain mb-4" // Cambié object-cover a object-contain
+          />
+        )}
         <div className="text-center mt-4">
           <h2 className="text-2xl font-bold">{product.title}</h2>
           <p className="text-gray-700 mt-2">{product.description}</p>

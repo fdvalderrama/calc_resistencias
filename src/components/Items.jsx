@@ -39,19 +39,19 @@ function Items() {
 
   return (
     <div>
-      <nav className="flex items-center p-4 bg-gray-200">
+      <nav className="flex items-center p-4">
         <span
           role="img"
           aria-label="sales-icon"
-          className="text-2xl cursor-pointer"
+          className="text-6xl cursor-pointer mr-4" // Aumenta el tamaño del ícono y ajusta el margen derecho
           onClick={() => navigate("/sales")}
         >
-          💸
+          🛍️
         </span>
         <input
           type="text"
           placeholder="Buscar..."
-          className="ml-4 flex-1 p-2 border border-gray-300 rounded"
+          className="flex-1 p-2 border border-black rounded-lg" // Contorno negro y bordes redondeados
           defaultValue={searchParam}
           onKeyDown={(e) => {
             if (e.key === "Enter") {

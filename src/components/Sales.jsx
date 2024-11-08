@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Sales = () => {
   const [sales, setSales] = useState([]);
@@ -25,18 +26,51 @@ const Sales = () => {
     fetchSales();
   }, []);
 
+  const navigate = useNavigate();
+
   return (
-    <div>
-      <h2>Ventas</h2>
-      <ul>
+    <div className="p-4">
+      <h2 className="text-center text-3xl font-extrabold mb-6 text-blue-600">
+        🛍️ Ventas
+      </h2>
+
+      <div>
         {sales.map((sale, index) => (
-          <li key={sale.productId || index}>
-            Producto: {sale.product?.title || "Sin título"}, Cantidad:{" "}
-            {sale.quantity || 1}, Precio: $
-            {sale.product?.price || "No disponible"}
-          </li>
+          <div
+            key={sale.productId || index}
+            className="flex items-center mb-4 p-4 border border-gray-300 rounded-lg"
+          >
+            <img
+              src={sale.product?.thumbnail || "default-image.jpg"}
+              alt={sale.product?.title || "Producto sin título"}
+              className="w-24 h-24 mr-4"
+            />
+            <div className="flex-1 text-center">
+              <h3 className="text-lg font-semibold">
+                {sale.product?.title || "Producto sin título"}
+              </h3>
+              <p className="text-gray-700">Cantidad: {sale.quantity || 1}</p>
+              <p>
+                <strong>Precio:</strong> $
+                {sale.product?.price || "No disponible"}
+              </p>
+              <p>
+                <strong>Total:</strong> $
+                {sale.product?.price * sale.quantity || 0}
+              </p>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
+
+      <div className="text-center mt-6">
+        <button
+          onClick={() => navigate("/")}
+          className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full font-semibold text-lg shadow-lg transform hover:scale-105 transition-transform duration-200"
+        >
+          Salir
+        </button>
+      </div>
     </div>
   );
 };
